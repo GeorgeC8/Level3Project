@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="project.js"></script>
+    <script>
+        function initialize()
+    {
+        diceTable = document.getElementById('dicetable');
+        dataForm = document.getElementById("dataform");
+        numDice = 0;
+        numRolls = 0;
+        numTriples = 0;
+        doubles = 0;
+        triples = 0;
+        mean = 0;
+        median = 0;
+        mode = 0;
+
+    }
+
+    function getRandomInteger(lower,upper)
+    {
+        var multiplier = upper -(lower-1);
+        var rnd=parseInt(Math.random()*multiplier)+lower;
+        return rnd;
+    }
+
+    function commit()
+    {
+        numDice = dataForm.numdice.value;
+        numRolls = dataForm.numrolls.value;
+        
+        allrolls=[];
+        
+        
+        for(let h =0; h<numRolls;h++)
+        {
+            
+            var newRow = diceTable.insertRow();
+            var NewCell = newRow.insertCell();
+            NewCell.innerHTML = 'Roll #' + (h+1);
+            
+            let rolls = []
+            for(let i =0; i<numDice;i++)
+            {
+                rolls[i]=getRandomInteger(1,6);
+                
+                
+            }
+                // NewCell = newRow.insertCell();
+                // let test = '';
+                // for(let i =0; i<rolls.length;i++)
+                // {
+                //     test+=" " +rolls[i];
+                // }
+                // NewCell.innerHTML=test;
+                
+            for(let i=0;i<numDice;i++)
+            {
+                NewCell = newRow.insertCell();
+                NewCell.innerHTML = rolls[i];
+                allrolls.push(rolls[i]);
+                
+            }
+            
+            if(numDice==3)
+            {
+               if(rolls[0]==rolls[1]&&rolls[1]==rolls[2])triples++;
+               else if(rolls[0]==rolls[1]||rolls[0]==rolls[2] ||rolls[1]==rolls[2])doubles++;
+            }
+            if(numDice==2)
+            {
+                if(rolls[0]==rolls[1]||rolls[0]==rolls[2] ||rolls[1]==rolls[2])doubles++;
+            }
+            
+        }
+        
+         
+         
+         median = findMedian(allrolls);
+         mode = findMode(allrolls);
+         mean = Math. round(100*(findMean(allrolls)))/100;
+         console.log("avg "+mean+" median "+median + " mode "+mode);
+         newRow = diceTable.insertRow();
+         
+         NewCell = newRow.insertCell();
+         NewCell.innerHTML = "Mean: "+mean;
+         
+         NewCell = newRow.insertCell();
+         NewCell.innerHTML = "Median: "+median;
+
+         NewCell = newRow.insertCell();
+         NewCell.innerHTML = "Mode: "+mode;
+
+         NewCell = newRow.insertCell();
+         NewCell.innerHTML = "Triples: "+triples;
+
+         NewCell = newRow.insertCell();
+         NewCell.innerHTML = "Doubles: "+doubles;
+
+         
+        //  NewCell.innerHTML =temp;
+
+
+
+
+    }
+    </script>
+    <link rel = 'stylesheet' href ='project.css'>
+</head>
+
+<body onload="initialize();">
+
+    <form id ='dataform'>
+        How many dice would you like to roll? <hr>
+        <ul>
+            <li><label><input type = "radio" name = "numdice" value = "1" /> One dice</label></li>
+            <li><label><input type = "radio" name = "numdice" value = "2" /> Two die</label></li>
+            <li><label><input type = "radio" name = "numdice" value = "3" /> Three die</label></li>        
+        </ul>
+        <br>
+        And how many times would you like to roll those dice? <hr>
+      <input type ='text' name ='numrolls'>
+    </form>
+    <button onclick = 'commit();'>Roll The Die</button>
+    <table id ='dicetable'>
+        <!-- <tr>
+
+        </tr> -->
+    </table>
+    
+</body>
+</html>
